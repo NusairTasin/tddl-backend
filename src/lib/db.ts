@@ -14,7 +14,15 @@ export async function connectDB() {
         console.log('Connecting to MongoDB...');
         await mongoose.connect(process.env.MONGODB_URI, {
             dbName: 'realestate',
-            bufferCommands: false
+            bufferCommands: false,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            family: 4,
+            maxPoolSize: 10,
+            minPoolSize: 1,
+            connectTimeoutMS: 10000,
+            retryWrites: true,
+            retryReads: true
         });
         
         const connection = mongoose.connection;

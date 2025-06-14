@@ -24,14 +24,37 @@ export async function GET() {
         console.log('Authorization successful');
 
         console.log('Attempting to connect to MongoDB...');
-        await connectDB()
-        console.log('MongoDB connection successful');
+        try {
+            await connectDB()
+            console.log('MongoDB connection successful');
+        } catch (dbError) {
+            console.error('Database connection error:', dbError);
+            return NextResponse.json(
+                { 
+                    errorType: 'DatabaseConnectionError',
+                    errorMessage: 'Failed to connect to database',
+                    details: dbError instanceof Error ? dbError.message : 'Unknown database error'
+                }, 
+                { status: 503 }
+            );
+        }
 
         console.log('Fetching listings...');
-        const listings = await Listing.find().lean()
-        console.log('Listings fetched successfully');
-        
-        return NextResponse.json(listings)
+        try {
+            const listings = await Listing.find().lean()
+            console.log('Listings fetched successfully');
+            return NextResponse.json(listings)
+        } catch (queryError) {
+            console.error('Database query error:', queryError);
+            return NextResponse.json(
+                { 
+                    errorType: 'DatabaseQueryError',
+                    errorMessage: 'Failed to fetch listings',
+                    details: queryError instanceof Error ? queryError.message : 'Unknown query error'
+                }, 
+                { status: 500 }
+            );
+        }
     } catch (error) {
         console.error('Detailed error in GET /api/listings:', {
             name: error instanceof Error ? error.name : 'Unknown',
