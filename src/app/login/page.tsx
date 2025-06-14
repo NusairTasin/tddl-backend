@@ -1,8 +1,14 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { login } from './actions'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
+  const router = useRouter()
+  useEffect(() => {
+    router.prefetch('/dashboard/home')
+  }, [])
+
   const [loading, setLoading] = useState(false)
   const handleLogin = () => {
     setLoading(true)
