@@ -3,18 +3,8 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { useEffect, useState } from "react";
-import { checkCookie } from "./actions";
 
 export default function Layout({ children}: { children: React.ReactNode}) {
-
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
-    useEffect(() => {
-    const fetchLoginStatus = async () => {
-      const loggedIn = await checkCookie()
-      setIsLoggedIn(loggedIn!)
-    }
-        fetchLoginStatus()
-    }, [])
 
     return ( 
         <SidebarProvider>

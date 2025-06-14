@@ -1,6 +1,4 @@
-import { timeStamp } from 'console';
-import { now } from 'mongoose';
-import { date, z } from 'zod';
+import { z } from 'zod';
 
 export const ListingSchema = z.object({
     title: z.string().min(5),

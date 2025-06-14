@@ -1,7 +1,8 @@
 'use client'
 
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import axios from 'axios'
+import Image from "next/image"
 
 type Listing = {
   _id: string,
@@ -41,7 +42,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {listings.map((listing) => (
           <div key={listing._id} className="border p-4 rounded-lg shadow">
-            <img
+            <Image
               src={listing.image}
               alt={listing.title}
              className="w-full h-48 object-cover rounded mb-3"

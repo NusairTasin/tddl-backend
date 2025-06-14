@@ -2,9 +2,6 @@ import { getSupabaseUser } from "@/helper/getUserA";
 import { connectDB } from "@/lib/db";
 import { Listing } from "@/lib/models/Listing";
 import { ListingSchema } from "@/types/listing";
-import { error } from "console";
-import { connect } from "http2";
-import { Concert_One } from "next/font/google";
 import { NextResponse } from "next/server";
 
 async function verify() {
