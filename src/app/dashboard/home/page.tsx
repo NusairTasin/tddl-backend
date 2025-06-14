@@ -24,13 +24,12 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    axios.get('/api/listings')
+    axios.get('https://tddl-backend.netlify.app/api/listings')
       .then((res) => {
         setListings(res.data)
-        console.log(res.data)
       })
       .catch((err) => {
-        console.error(err)
+        console.error("API error", err)
         setError(err.response?.data?.error || "Failed to fetch listings")
       })
   }, [])
