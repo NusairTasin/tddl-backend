@@ -13,12 +13,41 @@ async function verify() {
 }
 // Get all listings
 export async function GET() {
-    const unauthorized = await verify()
-    if(unauthorized) return unauthorized
+    try {
+        console.log('Starting GET request for listings...');
+        
+        const unauthorized = await verify()
+        if(unauthorized) {
+            console.log('Unauthorized access attempt');
+            return unauthorized;
+        }
+        console.log('Authorization successful');
 
-    await connectDB()
-    const listings = await Listing.find().lean()
-    return NextResponse.json(listings)
+        console.log('Attempting to connect to MongoDB...');
+        await connectDB()
+        console.log('MongoDB connection successful');
+
+        console.log('Fetching listings...');
+        const listings = await Listing.find().lean()
+        console.log('Listings fetched successfully');
+        
+        return NextResponse.json(listings)
+    } catch (error) {
+        console.error('Detailed error in GET /api/listings:', {
+            name: error instanceof Error ? error.name : 'Unknown',
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined
+        });
+        
+        return NextResponse.json(
+            { 
+                errorType: error instanceof Error ? error.name : 'Error',
+                errorMessage: error instanceof Error ? error.message : 'An unknown error has occurred',
+                details: error instanceof Error ? error.stack : undefined
+            }, 
+            { status: 500 }
+        )
+    }
 }
 
 // POST a new Listing
