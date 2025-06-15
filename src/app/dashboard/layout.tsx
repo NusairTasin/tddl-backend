@@ -1,20 +1,23 @@
 'use client'
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
-export default function Layout({ children}: { children: React.ReactNode}) {
-
-    return ( 
-        <SidebarProvider>
-            <AppSidebar />
-            <main className="min-h-screen">
-                {/* <div className="flex items-center justify-end p-4 border-b">
-                    <ThemeToggle />
-                </div> */}
-                <SidebarTrigger />
-                { children }
-            </main>
-        </SidebarProvider>
-    )
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <SidebarProvider>
+      <div className="flex h-screen">
+        <AppSidebar />
+        <main className="flex-1 overflow-y-auto">
+          <div className="container mx-auto p-6">
+            {children}
+          </div>
+        </main>
+      </div>
+    </SidebarProvider>
+  )
 }

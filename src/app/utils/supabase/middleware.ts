@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/login')
   ) {
     const url = request.nextUrl.clone()
-    url.pathname = '/dashboard/home'
+    url.pathname = '/dashboard/listings'
     return NextResponse.redirect(url)
   }
 

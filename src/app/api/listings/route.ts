@@ -41,7 +41,9 @@ export async function GET() {
 
         console.log('Fetching listings...');
         try {
-            const listings = await Listing.find().lean()
+            const listings = await Listing.find()
+                .sort({ createdAt: -1 })
+                .lean()
             console.log('Listings fetched successfully');
             return NextResponse.json(listings)
         } catch (queryError) {
@@ -87,6 +89,7 @@ export async function POST(req: Request) {
 
     await connectDB()
     const listing = await Listing.create(parsed.data)
+    console.log(listing)
     return NextResponse.json(listing, { status: 201 })
 }
 
@@ -101,4 +104,42 @@ export async function DELETE(req: Request) {
     const delListing = await Listing.findByIdAndDelete(body.id)
     if(!delListing) return NextResponse.json({ error: "Listing not found" }, { status: 404 });
     return NextResponse.json({ success: true, deleted: delListing }, { status: 200 });
+}
+
+export async function PUT(req: Request) {
+    try {
+        const unauthorized = await verify()
+        if(unauthorized) return unauthorized
+
+        const body = await req.json()
+        if(!body._id) return NextResponse.json({error: "Missing ID"}, { status: 400 });
+
+        const parsed = ListingSchema.safeParse(body)
+        if(!parsed.success) { 
+            return NextResponse.json({ error: parsed.error.flatten() }, { status: 400})
+        }
+
+        await connectDB()
+        const updatedListing = await Listing.findByIdAndUpdate(
+            body._id,
+            parsed.data,
+            { new: true, runValidators: true }
+        )
+
+        if(!updatedListing) {
+            return NextResponse.json({ error: "Listing not found" }, { status: 404 });
+        }
+
+        return NextResponse.json(updatedListing, { status: 200 });
+    } catch (error) {
+        console.error('Error in PUT /api/listings:', error);
+        return NextResponse.json(
+            { 
+                errorType: error instanceof Error ? error.name : 'Error',
+                errorMessage: error instanceof Error ? error.message : 'An unknown error has occurred',
+                details: error instanceof Error ? error.stack : undefined
+            }, 
+            { status: 500 }
+        );
+    }
 }
