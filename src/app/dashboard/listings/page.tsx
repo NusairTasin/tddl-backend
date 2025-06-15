@@ -314,22 +314,21 @@ export default function ListingsPage() {
                       Edit
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[90vw] md:max-w-[800px]">
+                  <DialogContent className="sm:max-w-[90vw] md:max-w-[800px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader className="pb-2">
-                      <DialogTitle className="text-2xl sm:text-3xl font-semibold">Edit Listing</DialogTitle>
-                      <DialogDescription className="text-base sm:text-lg text-muted-foreground">Modify the listing details below:</DialogDescription>
+                      <DialogTitle className="text-xl sm:text-2xl font-semibold">Edit</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-3 py-3">
                       {inputFields.map((field) => (
                         <div key={field.name} className="space-y-1.5">
-                          <label className="text-base sm:text-lg font-medium">{field.placeholder}</label>
+                          <label className="text-sm sm:text-base font-medium">{field.placeholder}</label>
                           {field.name === "description" ? (
                             <Textarea
                               name={field.name}
                               value={(editingListing as Partial<Listing>)?.[field.name] || ""}
                               onChange={handleInputChange}
                               placeholder={field.placeholder}
-                              className={`${formErrors[field.name] ? "border-red-500" : ""} min-h-[80px] sm:min-h-[100px] text-base sm:text-lg`}
+                              className={`${formErrors[field.name] ? "border-red-500" : ""} min-h-[80px] sm:min-h-[100px] text-sm sm:text-base`}
                             />
                           ) : (
                             <Input
@@ -338,19 +337,19 @@ export default function ListingsPage() {
                               value={(editingListing as Partial<Listing>)?.[field.name] || ""}
                               onChange={handleInputChange}
                               placeholder={field.placeholder}
-                              className={`${formErrors[field.name] ? "border-red-500" : ""} text-base sm:text-lg h-9 sm:h-10`}
+                              className={`${formErrors[field.name] ? "border-red-500" : ""} text-sm sm:text-base h-9 sm:h-10`}
                             />
                           )}
                           {formErrors[field.name] && (
-                            <p className="text-sm text-red-500">{formErrors[field.name]}</p>
+                            <p className="text-xs sm:text-sm text-red-500">{formErrors[field.name]}</p>
                           )}
                         </div>
                       ))}
                     </div>
                     <DialogFooter className="flex-col sm:flex-row gap-2 pt-2">
-                      <Button variant="outline" className="text-base sm:text-lg px-4 sm:px-6 w-full sm:w-auto" onClick={handleUpdate}>Save Changes</Button>
+                      <Button variant="outline" className="text-sm sm:text-base px-3 sm:px-4 w-full sm:w-auto" onClick={handleUpdate}>Save</Button>
                       <DialogClose asChild>
-                        <Button variant="secondary" className="text-base sm:text-lg px-4 sm:px-6 w-full sm:w-auto">Cancel</Button>
+                        <Button variant="secondary" className="text-sm sm:text-base px-3 sm:px-4 w-full sm:w-auto">Cancel</Button>
                       </DialogClose>
                     </DialogFooter>
                   </DialogContent>
