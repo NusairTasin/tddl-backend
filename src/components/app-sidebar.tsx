@@ -50,7 +50,7 @@ export function AppSidebar() {
         checkMobile()
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
-    }, [])
+    }, [router])
 
     return (
         <Sidebar className="border-r h-screen">

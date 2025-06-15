@@ -26,6 +26,12 @@ type Listing = {
   userEmail: string,
 }
 
+type InputField = {
+  name: keyof Listing;
+  type: string;
+  placeholder: string;
+}
+
 const DEFAULT_IMAGE = "https://dummyimage.com/600x400/000/fff&text=No+Image"
 
 export default function ListingsPage() {
@@ -35,9 +41,9 @@ export default function ListingsPage() {
   const [editingListing, setEditingListing] = useState<Listing | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newListing, setNewListing] = useState<Partial<Listing>>({});
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof Listing, string>>>({});
 
-  const inputFields = [
+  const inputFields: InputField[] = [
     { name: "title", type: "text", placeholder: "Title" },
     { name: "description", type: "text", placeholder: "Description" },
     { name: "price", type: "number", placeholder: "Price" },
@@ -175,9 +181,9 @@ export default function ListingsPage() {
   };
 
   const validateForm = (listing: Listing): boolean => {
-    const errors: Record<string, string> = {};
+    const errors: Partial<Record<keyof Listing, string>> = {};
     for (const field of inputFields) {
-      if (!listing[field.name as keyof Listing]) {
+      if (!listing[field.name]) {
         errors[field.name] = `Please fill in the ${field.name}`;
       }
     }
@@ -207,7 +213,7 @@ export default function ListingsPage() {
                   {field.name === "description" ? (
                     <Textarea
                       name={field.name}
-                      value={(newListing as any)[field.name] || ""}
+                      value={(newListing as Partial<Listing>)[field.name] || ""}
                       onChange={handleNewInputChange}
                       placeholder={field.placeholder}
                       className={`${formErrors[field.name] ? "border-red-500" : ""} min-h-[150px] text-base`}
@@ -216,7 +222,7 @@ export default function ListingsPage() {
                     <Input
                       type={field.type}
                       name={field.name}
-                      value={(newListing as any)[field.name] || ""}
+                      value={(newListing as Partial<Listing>)[field.name] || ""}
                       onChange={handleNewInputChange}
                       placeholder={field.placeholder}
                       className={`${formErrors[field.name] ? "border-red-500" : ""} text-base`}
@@ -320,7 +326,7 @@ export default function ListingsPage() {
                           {field.name === "description" ? (
                             <Textarea
                               name={field.name}
-                              value={(editingListing as any)?.[field.name] || ""}
+                              value={(editingListing as Partial<Listing>)?.[field.name] || ""}
                               onChange={handleInputChange}
                               placeholder={field.placeholder}
                               className={`${formErrors[field.name] ? "border-red-500" : ""} min-h-[80px] sm:min-h-[100px] text-base sm:text-lg`}
@@ -329,7 +335,7 @@ export default function ListingsPage() {
                             <Input
                               type={field.type}
                               name={field.name}
-                              value={(editingListing as any)?.[field.name] || ""}
+                              value={(editingListing as Partial<Listing>)?.[field.name] || ""}
                               onChange={handleInputChange}
                               placeholder={field.placeholder}
                               className={`${formErrors[field.name] ? "border-red-500" : ""} text-base sm:text-lg h-9 sm:h-10`}
