@@ -12,7 +12,6 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useSidebar } from "@/components/ui/sidebar"
 
 type Listing = {
   _id: string,
@@ -36,7 +35,6 @@ type InputField = {
 const DEFAULT_IMAGE = "https://dummyimage.com/600x400/000/fff&text=No+Image"
 
 export default function ListingsPage() {
-  const { setOpenMobile } = useSidebar();
   const [listings, setListings] = useState<Listing[]>([])
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
