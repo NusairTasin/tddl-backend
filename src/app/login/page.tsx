@@ -7,7 +7,7 @@ export default function LoginPage() {
   const router = useRouter()
   useEffect(() => {
     router.prefetch('/dashboard/listings')
-  }, [])
+  }, [router])
 
   const [loading, setLoading] = useState(false)
   const handleLogin = () => {

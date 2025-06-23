@@ -17,6 +17,7 @@ import { Building2, FileText, LogOut, PlusCircle, User2, ChevronUp, Menu } from 
 import { logout, fetchUsername } from "@/app/dashboard/actions"
 import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const items = [
     {
@@ -34,14 +35,17 @@ const items = [
 export function AppSidebar() {
     const pathname = usePathname()
     const router = useRouter()
-    const [userN, setUserN] = useState<string | null>("")
+    const [userN, setUserN] = useState<string | null>(null)
+    const [loadingUser, setLoadingUser] = useState(true)
     const [isMobile, setIsMobile] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         const getUsername = async () => {
+            setLoadingUser(true)
             const name = await fetchUsername()
             setUserN(name)
+            setLoadingUser(false)
         }
         getUsername()
 
@@ -130,7 +134,11 @@ export function AppSidebar() {
                                     <SidebarMenuButton className="w-full justify-between hover:bg-muted">
                                         <div className="flex items-center gap-2">
                                             <User2 className="h-5 w-5" />
-                                            <span className="text-base md:text-lg lg:text-xl font-medium truncate">{userN}</span>
+                                            {loadingUser ? (
+                                                <Skeleton className="h-6 w-32" />
+                                            ) : (
+                                                <span className="text-base md:text-lg lg:text-xl font-medium truncate">{userN ? userN.split('@')[0] : 'No email'}</span>
+                                            )}
                                         </div>
                                         <ChevronUp className="h-4 w-4" />
                                     </SidebarMenuButton>
