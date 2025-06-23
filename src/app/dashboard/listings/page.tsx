@@ -6,12 +6,13 @@ import Image from "next/image"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Dialog, DialogTrigger, DialogClose, DialogDescription, DialogTitle, DialogHeader, DialogFooter, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Plus, Pencil, Trash2, Building2, MapPin, Tag, User } from "lucide-react"
+import { Plus, Pencil, Trash2, Building2, MapPin, Tag, User, Menu } from "lucide-react"
 import { deleteListing, fetchListings, updateListing } from "@/lib/api/listings"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useSidebar } from "@/components/ui/sidebar"
 
 type Listing = {
   _id: string,
@@ -35,6 +36,7 @@ type InputField = {
 const DEFAULT_IMAGE = "https://dummyimage.com/600x400/000/fff&text=No+Image"
 
 export default function ListingsPage() {
+  const { setOpenMobile } = useSidebar();
   const [listings, setListings] = useState<Listing[]>([])
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -206,7 +208,7 @@ export default function ListingsPage() {
               Add Listing
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px]">
+          <DialogContent className="sm:max-w-[800px] max-h-[70vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-2xl">Add New Listing</DialogTitle>
               <DialogDescription className="text-base">Fill in the details for your new listing:</DialogDescription>
