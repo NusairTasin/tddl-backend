@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 export default function LoginPage() {
   const router = useRouter()
   useEffect(() => {
-    router.prefetch('/dashboard/home')
+    router.prefetch('/dashboard/listings')
   }, [])
 
   const [loading, setLoading] = useState(false)

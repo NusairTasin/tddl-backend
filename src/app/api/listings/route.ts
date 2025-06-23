@@ -2,7 +2,7 @@ import { getSupabaseUser } from "@/helper/getUserA";
 import { connectDB } from "@/lib/db";
 import { Listing } from "@/lib/models/Listing";
 import { ListingSchema } from "@/types/listing";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 async function verify() {
     const user =  await getSupabaseUser()
@@ -12,7 +12,7 @@ async function verify() {
     return null
 }
 // Get all listings
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
         console.log('Starting GET request for listings...');
         
@@ -39,13 +39,23 @@ export async function GET() {
             );
         }
 
-        console.log('Fetching listings...');
+        // Pagination logic
+        const { searchParams } = req.nextUrl;
+        const page = parseInt(searchParams.get('page') || '1', 10);
+        const limit = parseInt(searchParams.get('limit') || '10', 10);
+        const skip = (page - 1) * limit;
+        console.log(`Fetching listings for page ${page} with limit ${limit}`);
         try {
-            const listings = await Listing.find()
-                .sort({ createdAt: -1 })
-                .lean()
+            const [listings, total] = await Promise.all([
+                Listing.find()
+                    .sort({ createdAt: -1 })
+                    .skip(skip)
+                    .limit(limit)
+                    .lean(),
+                Listing.countDocuments()
+            ]);
             console.log('Listings fetched successfully');
-            return NextResponse.json(listings)
+            return NextResponse.json({ listings, total });
         } catch (queryError) {
             console.error('Database query error:', queryError);
             return NextResponse.json(

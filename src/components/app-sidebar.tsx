@@ -77,7 +77,7 @@ export function AppSidebar() {
             <Sidebar className={`border-r h-screen ${isMobile ? 'fixed inset-0 z-40 transform transition-transform duration-200 ease-in-out bg-background' : ''} ${isMobile && !isOpen ? '-translate-x-full' : ''}`}>
                 <SidebarHeader className="border-b p-4">
                     <div className="flex items-center justify-between">
-                        <span className="text-xl lg:text-3xl font-bold">TDDL</span>
+                        <span className="text-lg md:text-xl lg:text-2xl font-bold">TDDL</span>
                         {isMobile && (
                             <Button 
                                 variant="ghost" 
@@ -111,7 +111,7 @@ export function AppSidebar() {
                                                 }`}
                                             >
                                                 <item.icon className="h-5 w-5" />
-                                                <span className="text-sm font-medium">{item.title}</span>
+                                                <span className="text-base md:text-lg lg:text-xl font-medium">{item.title}</span>
                                             </a>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
@@ -130,7 +130,7 @@ export function AppSidebar() {
                                     <SidebarMenuButton className="w-full justify-between hover:bg-muted">
                                         <div className="flex items-center gap-2">
                                             <User2 className="h-5 w-5" />
-                                            <span className="text-sm font-medium truncate">{userN}</span>
+                                            <span className="text-base md:text-lg lg:text-xl font-medium truncate">{userN}</span>
                                         </div>
                                         <ChevronUp className="h-4 w-4" />
                                     </SidebarMenuButton>

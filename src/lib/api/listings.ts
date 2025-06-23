@@ -12,6 +12,6 @@ interface Listing {
   userEmail: string;
 }
 
-export const fetchListings = () => axios.get('/api/listings');
+export const fetchListings = (page = 1, limit = 10) => axios.get(`/api/listings?page=${page}&limit=${limit}`);
 export const updateListing = (data: Listing) => axios.put('/api/listings', data);
 export const deleteListing = (id: string) => axios.delete('/api/listings', { data: { id } });

@@ -42,6 +42,9 @@ export default function ListingsPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newListing, setNewListing] = useState<Partial<Listing>>({});
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof Listing, string>>>({});
+  const [page, setPage] = useState(1);
+  const [limit] = useState(6); // 6 per page for grid
+  const [total, setTotal] = useState(0);
 
   const inputFields: InputField[] = [
     { name: "title", type: "text", placeholder: "Title" },
@@ -54,9 +57,10 @@ export default function ListingsPage() {
 
   useEffect(() => {
     setIsLoading(true)
-    fetchListings()
+    fetchListings(page, limit)
       .then((res) => {
-        setListings(res.data)
+        setListings(res.data.listings)
+        setTotal(res.data.total)
       })
       .catch((err) => {
         console.error("API error:", err)
@@ -68,7 +72,7 @@ export default function ListingsPage() {
       .finally(() => {
         setIsLoading(false)
       })
-  }, [])
+  }, [page, limit])
 
   const getValidImageUrl = (imageUrl: string | null | undefined) => {
     if (!imageUrl) return DEFAULT_IMAGE
@@ -250,7 +254,7 @@ export default function ListingsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
         {isLoading ? (
-          Array.from({ length: 6 }).map((_, index) => (
+          Array.from({ length: limit }).map((_, index) => (
             <Card key={index} className="w-full">
               <CardHeader>
                 <Skeleton className="w-full h-[200px] rounded-t-lg" />
@@ -367,6 +371,24 @@ export default function ListingsPage() {
             </Card>
           ))
         )}
+      </div>
+      {/* Pagination Controls */}
+      <div className="flex justify-center gap-4 mt-6">
+        <Button
+          variant="outline"
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </Button>
+        <span className="self-center">Page {page} of {Math.max(1, Math.ceil(total / limit))}</span>
+        <Button
+          variant="outline"
+          onClick={() => setPage((p) => p + 1)}
+          disabled={page >= Math.ceil(total / limit)}
+        >
+          Next
+        </Button>
       </div>
     </div>
   )
