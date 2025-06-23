@@ -2,7 +2,6 @@
 
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu } from "lucide-react"
 
@@ -28,15 +27,6 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
   return (
     <SidebarProvider>
       <div className="flex flex-col md:flex-row h-screen">

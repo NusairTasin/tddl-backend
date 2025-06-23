@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { Building2, FileText, LogOut, PlusCircle, User2, ChevronUp, Menu, X } from "lucide-react"
+import { Building2, FileText, LogOut, User2, ChevronUp, X } from "lucide-react"
 import { logout, fetchUsername } from "@/app/dashboard/actions"
 import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
