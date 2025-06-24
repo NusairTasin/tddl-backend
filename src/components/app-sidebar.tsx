@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { Building2, FileText, LogOut, User2, ChevronUp, X } from "lucide-react"
+import { Building2, FileText, LogOut, User2, ChevronUp, X, PhoneCall } from "lucide-react"
 import { logout, fetchUsername } from "@/app/dashboard/actions"
 import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
@@ -30,6 +30,11 @@ const items = [
         title: "Blogs",
         url: "/dashboard/blogs",
         icon: FileText
+    },
+    {
+        title: "Contact",
+        url: "/dashboard/contact",
+        icon: PhoneCall
     }
 ]
 
@@ -76,8 +81,8 @@ export function AppSidebar() {
             )}
             {/* Sidebar Content: Always Rendered */}
             <SidebarHeader className="border-b p-4">
-                <div className="flex items-center justify-between">
-                    <span className="text-lg md:text-xl lg:text-2xl font-bold">TDDL</span>
+                <div className="flex items-center justify-start">
+                    <span className="text-lg md:text-xl lg:text-2xl text-primary font-bold">TDDL</span>
                 </div>
             </SidebarHeader>
 
@@ -99,7 +104,7 @@ export function AppSidebar() {
                                             }`}
                                         >
                                             <item.icon className="h-5 w-5" />
-                                            <span className="text-base md:text-lg lg:text-xl font-medium">{item.title}</span>
+                                            <span className="text-md sm:text-sm md:text-md lg:text-lg font-medium">{item.title}</span>
                                         </a>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -121,7 +126,7 @@ export function AppSidebar() {
                                         {loadingUser ? (
                                             <Skeleton className="h-6 w-32" />
                                         ) : (
-                                            <span className="text-base md:text-lg lg:text-xl font-medium truncate">{userN ? userN.split('@')[0] : 'No email'}</span>
+                                            <span className="sm:text-sm md:text-md lg:text-lg font-medium truncate">{userN ? userN.split('@')[0] : 'No email'}</span>
                                         )}
                                     </div>
                                     <ChevronUp className="h-4 w-4" />
@@ -129,12 +134,12 @@ export function AppSidebar() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 side="top"
-                                align="end"
-                                className="w-[--radix-popper-anchor-width]"
+                                align="center"
+                                className="w-[--radix-popper-anchor-width] min-w-40"
                             >
                                 <DropdownMenuItem 
                                     onClick={logout} 
-                                    className="cursor-pointer text-destructive focus:text-destructive"
+                                    className="cursor-pointer focus:font-bold focus:text-primary text-primary font-semibold sm:text-sm md:text-md"
                                 >
                                     <LogOut className="h-4 w-4 mr-2" />
                                     <span>Logout</span>

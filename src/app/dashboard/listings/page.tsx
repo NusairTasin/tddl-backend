@@ -55,6 +55,10 @@ export default function ListingsPage() {
     { name: "country", type: "text", placeholder: "Country" },
   ]
 
+  const dialogInputClass = "min-h-[50px] sm:text-sm md:text-md";
+  const dialogLabelClass = "sm:text-sm md:text-md font-medium";
+  const dialogDescription = "min-h-[70px] sm:text-sm md:text-md";
+
   useEffect(() => {
     setIsLoading(true)
     fetchListings(page, limit)
@@ -197,8 +201,8 @@ export default function ListingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Listings</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between items-center gap-4">
+        <h1 className="sm:text-2xl md:text-3xl font-bold tracking-tight w-full text-center sm:text-left sm:w-auto">Listings</h1>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto text-base">
@@ -206,21 +210,22 @@ export default function ListingsPage() {
               Add Listing
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] max-h-[70vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-[70vw] max-h-[85vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl">Add New Listing</DialogTitle>
-              <DialogDescription className="text-base">Fill in the details for your new listing:</DialogDescription>
+              <DialogTitle className="sm:text-sm md:text-md">Add New Listing</DialogTitle>
+              <DialogDescription className="sm:text-sm md:text-md">Fill in the details for your new listing:</DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               {inputFields.map((field) => (
                 <div key={field.name} className="space-y-2">
+                  <label className={dialogLabelClass}>{field.placeholder}</label>
                   {field.name === "description" ? (
                     <Textarea
                       name={field.name}
                       value={(newListing as Partial<Listing>)[field.name] || ""}
                       onChange={handleNewInputChange}
                       placeholder={field.placeholder}
-                      className={`${formErrors[field.name] ? "border-red-500" : ""} min-h-[150px] text-base`}
+                      className={`${formErrors[field.name] ? "border-red-500" : ""} ${dialogDescription}`}
                     />
                   ) : (
                     <Input
@@ -229,18 +234,18 @@ export default function ListingsPage() {
                       value={(newListing as Partial<Listing>)[field.name] || ""}
                       onChange={handleNewInputChange}
                       placeholder={field.placeholder}
-                      className={`${formErrors[field.name] ? "border-red-500" : ""} text-base`}
+                      className={`${formErrors[field.name] ? "w-10 border-red-500" : ""} ${dialogInputClass}`}
                     />
                   )}
                   {formErrors[field.name] && (
-                    <p className="text-sm text-red-500">{formErrors[field.name]}</p>
+                    <p className="text-md text-red-500">{formErrors[field.name]}</p>
                   )}
                 </div>
               ))}
             </div>
             <DialogFooter>
-              <Button variant="outline" className="text-base" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
-              <Button className="text-base" onClick={handleAddListing}>Add Listing</Button>
+              <Button variant="outline" className="text-sm" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
+              <Button className="text-sm" onClick={handleAddListing}>Add Listing</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -272,8 +277,8 @@ export default function ListingsPage() {
         ) : listings.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <Building2 className="mx-auto h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 text-xl font-semibold">No listings found</h3>
-            <p className="mt-2 text-base text-muted-foreground">Get started by creating a new listing.</p>
+            <h3 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold">No listings found</h3>
+            <p className="mt-2 text-lg sm:text-xl md:text-2xl text-muted-foreground">Get started by creating a new listing.</p>
           </div>
         ) : (
           listings.map((listing) => (
@@ -289,21 +294,21 @@ export default function ListingsPage() {
                 </div>
               </CardHeader>
               <CardContent className="p-4 space-y-2">
-                <h3 className="text-xl font-semibold line-clamp-1">{listing.title}</h3>
-                <p className="text-base text-muted-foreground line-clamp-2">{listing.description}</p>
-                <div className="flex items-center text-base text-muted-foreground">
+                <h3 className="sm:text-sm md:text-lg font-semibold line-clamp-1">{listing.title}</h3>
+                <p className="sm:text-sm md:text-lg text-muted-foreground line-clamp-2">{listing.description}</p>
+                <div className="flex items-center text-md sm:text-xl md:text-2xl text-muted-foreground">
                   <MapPin className="h-5 w-5 mr-1 flex-shrink-0" />
-                  <span className="line-clamp-1">{listing.address}, {listing.city}, {listing.country}</span>
+                  <span className="line-clamp-1 sm:text-sm md:text-md">{listing.address}, {listing.city}, {listing.country}</span>
                 </div>
-                <div className="flex items-center text-base text-muted-foreground">
+                <div className="flex items-center sm:text-sm md:text-md text-muted-foreground">
                   <Tag className="h-5 w-5 mr-1 flex-shrink-0" />
                   <span className="line-clamp-1">{listing.facilities}</span>
                 </div>
                 <div className="flex items-center text-base text-muted-foreground">
                   <User className="h-5 w-5 mr-1 flex-shrink-0" />
-                  <span className="line-clamp-1">{listing.userEmail}</span>
+                  <span className="line-clamp-1 sm:text-sm md:text-md">{listing.userEmail}</span>
                 </div>
-                <p className="text-xl font-bold text-primary">${listing.price.toFixed(2)}</p>
+                <p className="sm:text-md md:text-lg font-bold text-primary">${listing.price.toFixed(2)}</p>
               </CardContent>
               <CardFooter className="p-4 pt-0 flex gap-2">
                 <Dialog>
@@ -318,21 +323,21 @@ export default function ListingsPage() {
                       Edit
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[90vw] md:max-w-[800px] max-h-[90vh] overflow-y-auto">
+                  <DialogContent className="sm:max-w-[70vw] max-h-[85vh] overflow-y-auto">
                     <DialogHeader className="pb-2">
-                      <DialogTitle className="text-xl sm:text-2xl font-semibold">Edit</DialogTitle>
+                      <DialogTitle className="sm:text-md md:text-lg font-semibold">Edit</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-3 py-3">
                       {inputFields.map((field) => (
                         <div key={field.name} className="space-y-1.5">
-                          <label className="text-sm sm:text-base font-medium">{field.placeholder}</label>
+                          <label className={dialogLabelClass}>{field.placeholder}</label>
                           {field.name === "description" ? (
                             <Textarea
                               name={field.name}
                               value={(editingListing as Partial<Listing>)?.[field.name] || ""}
                               onChange={handleInputChange}
                               placeholder={field.placeholder}
-                              className={`${formErrors[field.name] ? "border-red-500" : ""} min-h-[80px] sm:min-h-[100px] text-sm sm:text-base`}
+                              className={`${formErrors[field.name] ? "border-red-500" : ""} ${dialogDescription}`}
                             />
                           ) : (
                             <Input
@@ -341,19 +346,19 @@ export default function ListingsPage() {
                               value={(editingListing as Partial<Listing>)?.[field.name] || ""}
                               onChange={handleInputChange}
                               placeholder={field.placeholder}
-                              className={`${formErrors[field.name] ? "border-red-500" : ""} text-sm sm:text-base h-9 sm:h-10`}
+                              className={`${formErrors[field.name] ? "border-red-500" : ""} ${dialogInputClass}`}
                             />
                           )}
                           {formErrors[field.name] && (
-                            <p className="text-xs sm:text-sm text-red-500">{formErrors[field.name]}</p>
+                            <p className="text-lg text-red-500">{formErrors[field.name]}</p>
                           )}
                         </div>
                       ))}
                     </div>
                     <DialogFooter className="flex-col sm:flex-row gap-2 pt-2">
-                      <Button variant="outline" className="text-sm sm:text-base px-3 sm:px-4 w-full sm:w-auto" onClick={handleUpdate}>Save</Button>
+                      <Button variant="outline" className="sm:text-sm md:text-md px-3 sm:px-4 w-full sm:w-auto" onClick={handleUpdate}>Save</Button>
                       <DialogClose asChild>
-                        <Button variant="secondary" className="text-sm sm:text-base px-3 sm:px-4 w-full sm:w-auto">Cancel</Button>
+                        <Button variant="secondary" className="sm:text-sm md:text-md px-3 sm:px-4 w-full sm:w-auto">Cancel</Button>
                       </DialogClose>
                     </DialogFooter>
                   </DialogContent>
@@ -362,7 +367,7 @@ export default function ListingsPage() {
                   variant="destructive" 
                   size="sm"
                   onClick={() => handleDelete(listing._id)}
-                  className="text-base"
+                  className="text-sm"
                 >
                   <Trash2 className="h-5 w-5 mr-2" />
                   Delete
@@ -381,7 +386,7 @@ export default function ListingsPage() {
         >
           Previous
         </Button>
-        <span className="self-center">Page {page} of {Math.max(1, Math.ceil(total / limit))}</span>
+        <span className="self-center sm:text-sm md:text-md">Page {page} of {Math.max(1, Math.ceil(total / limit))}</span>
         <Button
           variant="outline"
           onClick={() => setPage((p) => p + 1)}
