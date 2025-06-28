@@ -12,7 +12,7 @@ async function verify() {
     return null
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     const unauthorized = await verify()
     if (unauthorized) return unauthorized
     try {

@@ -1,15 +1,16 @@
 import { z } from "zod"
 
-export const listingSchema = z.object({
+export const ListingSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title is too long"),
   description: z.string().min(1, "Description is required").max(1000, "Description is too long"),
   price: z.number().min(0, "Price must be positive"),
   address: z.string().min(1, "Address is required"),
   city: z.string().min(1, "City is required"),
-  country: z.string().min(1, "Country is required"),
-  image: z.string().url("Invalid image URL").optional(),
-  facilities: z.string().optional(),
-  userEmail: z.string().email("Invalid email"),
+  image: z.string().url("Invalid image URL").optional().or(z.literal("")),
+  facilities: z.string().optional().or(z.literal("")),
+  contactName: z.string().min(1, "Contact name is required"),
+  contactEmail: z.string().email("Invalid contact email"),
+  contactPhone: z.string().min(1, "Contact phone is required"),
 })
 
-export type ListingFormData = z.infer<typeof listingSchema> 
+export type ListingFormData = z.infer<typeof ListingSchema> 

@@ -1,8 +1,9 @@
 import { getSupabaseUser } from "@/helper/getUserA";
 import { connectDB } from "@/lib/db";
 import { Listing } from "@/lib/models/Listing";
-import { ListingSchema } from "@/types/listing";
+import { ListingSchema } from "@/lib/validations/listing";
 import { NextResponse, NextRequest } from "next/server";
+import { Contact } from "@/lib/models/Contact";
 
 async function verify() {
     const user =  await getSupabaseUser()
@@ -87,20 +88,47 @@ export async function GET(req: NextRequest) {
 
 // POST a new Listing
 export async function POST(req: Request) {
-    const unauthorized = await verify()
-    if(unauthorized) return unauthorized
+    try {
+        const unauthorized = await verify()
+        if(unauthorized) return unauthorized
 
-    const body = await req.json()
-    const parsed = ListingSchema.safeParse(body)
+        const body = await req.json()
+        const parsed = ListingSchema.safeParse(body)
 
-    if(!parsed.success) { 
-        return NextResponse.json({ error: parsed.error.flatten() }, { status: 400})
+        if(!parsed.success) { 
+            return NextResponse.json({ error: parsed.error.flatten() }, { status: 400})
+        }
+
+        await connectDB()
+        // Fetch the first contact
+        const contact = await Contact.findOne({})
+        if (!contact) {
+            return NextResponse.json({ error: 'No contact found. Please create a contact first.' }, { status: 400 })
+        }
+
+        // Set default values for optional fields
+        const listingData = {
+            ...parsed.data,
+            image: parsed.data.image || "https://dummyimage.com/600x400/000/fff&text=No+Image",
+            facilities: parsed.data.facilities || "No facilities listed",
+            contactName: contact.name,
+            contactEmail: contact.email,
+            contactPhone: contact.phone
+        }
+
+        const listing = await Listing.create(listingData)
+        return NextResponse.json(listing, { status: 201 })
+    } catch (error) {
+        console.error('Error in POST /api/listings:', error);
+        return NextResponse.json(
+            { 
+                errorType: error instanceof Error ? error.name : 'Error',
+                errorMessage: error instanceof Error ? error.message : 'An unknown error has occurred',
+                details: error instanceof Error ? error.stack : undefined
+            }, 
+            { status: 500 }
+        );
     }
-
-    await connectDB()
-    const listing = await Listing.create(parsed.data)
-    console.log(listing)
-    return NextResponse.json(listing, { status: 201 })
 }
 
 export async function DELETE(req: Request) {
@@ -130,9 +158,25 @@ export async function PUT(req: Request) {
         }
 
         await connectDB()
+        // Fetch the first contact
+        const contact = await Contact.findOne({})
+        if (!contact) {
+            return NextResponse.json({ error: 'No contact found. Please create a contact first.' }, { status: 400 })
+        }
+
+        // Set default values for optional fields
+        const updateData = {
+            ...parsed.data,
+            image: parsed.data.image || "https://dummyimage.com/600x400/000/fff&text=No+Image",
+            facilities: parsed.data.facilities || "No facilities listed",
+            contactName: contact.name,
+            contactEmail: contact.email,
+            contactPhone: contact.phone
+        }
+
         const updatedListing = await Listing.findByIdAndUpdate(
             body._id,
-            parsed.data,
+            updateData,
             { new: true, runValidators: true }
         )
 

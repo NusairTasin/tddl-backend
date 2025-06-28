@@ -1,15 +1,17 @@
 import axios from 'axios'
 
 interface Listing {
-  title: string;
-  description: string;
-  price: number;
-  address: string;
-  city: string;
-  country: string;
-  image: string;
-  facilities: string;
-  userEmail: string;
+  _id: string,
+  title: string,
+  description: string,
+  price: number,
+  address: string,
+  city: string,
+  image: string,
+  facilities: string,
+  contactName: string,
+  contactEmail: string,
+  contactPhone: string,
 }
 
 export const fetchListings = (page = 1, limit = 10) => axios.get(`/api/listings?page=${page}&limit=${limit}`);

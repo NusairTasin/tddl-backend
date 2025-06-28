@@ -7,10 +7,11 @@ const ListingSchema = new Schema({
   price: { type: Number, required: true },
   address: { type: String, required: true },
   city: { type: String, required: true },
-  country: { type: String, required: true },
-  image: { type: String, required: true },
-  facilities: { type: String, required: true }, // Or [String] if you parse it as an array
-  userEmail: { type: String, required: true },
+  image: { type: String, required: false },
+  facilities: { type: String, required: false }, // Or [String] if you parse it as an array
+  contactName: { type: String, required: true },
+  contactEmail: { type: String, required: true },
+  contactPhone: { type: String, required: true },
 }, {
   timestamps: true,
   strict: true, // This ensures extra fields are dropped (default is true anyway)

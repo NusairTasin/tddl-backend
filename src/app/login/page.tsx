@@ -15,7 +15,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen overflow-y-auto px-4'>
+    <div className='flex flex-col items-center justify-center min-h-screen px-4 py-8'>
       <span className="text-lg md:text-xl lg:text-2xl mb-5 text-green-700">{loading ? 'Logging in...' : 'Login Page'}</span>
       <form className='flex flex-col gap-4 items-center justify-center w-full max-w-xs'>
         <label className='text-gray-500 justify font-bold' htmlFor="email">Email:</label>

@@ -44,6 +44,7 @@ export default function Contact() {
       }
     } catch (e) {
       setError("Failed to load contact.")
+      console.log(e)
     } finally {
       setLoading(false)
     }
@@ -70,8 +71,9 @@ export default function Contact() {
       if (!res.ok) throw new Error("Failed to update contact.")
       await fetchContact()
       setShowEdit(false)
-    } catch (e: any) {
+    } catch (e) {
       setError("Failed to update contact.")
+      console.error(e)
     } finally {
       setSubmitting(false)
     }
@@ -90,8 +92,9 @@ export default function Contact() {
       if (!res.ok) throw new Error("Failed to delete contact.")
       setContact(null)
       setShowDelete(false)
-    } catch (e: any) {
+    } catch (e) {
       setError("Failed to delete contact.")
+      console.log(e)
     } finally {
       setSubmitting(false)
     }
@@ -113,15 +116,16 @@ export default function Contact() {
       }
       await fetchContact()
       setAddForm({ name: "", email: "", phone: "" })
-    } catch (e: any) {
-      setAddError(e.message)
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : "An error occured";
+      setAddError(errorMessage)
     } finally {
       setAddSubmitting(false)
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-background">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background py-8">
       <div className="w-full max-w-md">
         {loading ? (
           <Card className="mb-4"><CardContent>Loading...</CardContent></Card>
